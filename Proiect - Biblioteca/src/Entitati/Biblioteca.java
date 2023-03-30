@@ -49,4 +49,14 @@ public class Biblioteca {
     public void setCarti(List<Carte> carti) {
         this.carti = carti;
     }
+
+    @Override
+    public String toString() {
+        return "Biblioteca{" +
+                "id=" + id +
+                ", nume='" + nume + '\'' +
+                ", adresa=" + adresa +
+                ", carti=" + carti +
+                '}';
+    }
 }

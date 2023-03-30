@@ -18,4 +18,11 @@ public class Roman extends Carte{
     public void setNrCapitole(int nrCapitole) {
         this.nrCapitole = nrCapitole;
     }
+
+    @Override
+    public String toString() {
+        return "Roman{" +
+                "nrCapitole=" + nrCapitole +
+                '}';
+    }
 }

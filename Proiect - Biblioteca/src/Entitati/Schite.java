@@ -18,4 +18,11 @@ public class Schite extends Carte{
     public void setNrActe(int nrActe) {
         this.nrActe = nrActe;
     }
+
+    @Override
+    public String toString() {
+        return "Schite{" +
+                "nrActe=" + nrActe +
+                '}';
+    }
 }

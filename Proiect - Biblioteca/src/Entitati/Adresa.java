@@ -57,4 +57,15 @@ public class Adresa {
     public void setNr(String nr) {
         this.nr = nr;
     }
+
+    @Override
+    public String toString() {
+        return "Adresa{" +
+                "id=" + id +
+                ", tara='" + tara + '\'' +
+                ", oras='" + oras + '\'' +
+                ", strada='" + strada + '\'' +
+                ", nr='" + nr + '\'' +
+                '}';
+    }
 }

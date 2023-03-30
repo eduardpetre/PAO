@@ -47,4 +47,14 @@ public abstract class Utilizator {
     public void setTelefon(String telefon) {
         this.telefon = telefon;
     }
+
+    @Override
+    public String toString() {
+        return "Utilizator{" +
+                "id=" + id +
+                ", nume='" + nume + '\'' +
+                ", email='" + email + '\'' +
+                ", telefon='" + telefon + '\'' +
+                '}';
+    }
 }

@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface InterfataCarte {
     public List<Carte> getCarti();
-    public Carte getCarteById(int idx);
-    public void adaugaCarte(Carte carte);
-    public void updateCarte(int idx, Carte carte);
-    public void stergeCarte(int idx);
+    public Carte getCarteById(int idx) throws Exception;
+    public void adaugaCarte(Carte carte) throws Exception;
+    public void updateCarte(int idx, Carte carte) throws Exception;
+    public void stergeCarte(int idx) throws Exception;
 }

@@ -18,4 +18,11 @@ public class Poezie extends Carte{
     public void setNrVolum(int nrVolum) {
         this.nrVolum = nrVolum;
     }
+
+    @Override
+    public String toString() {
+        return "Poezie{" +
+                "nrVolum=" + nrVolum +
+                '}';
+    }
 }

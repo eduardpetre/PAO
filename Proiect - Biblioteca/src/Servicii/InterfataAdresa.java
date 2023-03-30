@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface InterfataAdresa {
     public List<Adresa> getAdrese();
-    public Adresa getAdresaById(int idx);
-    public void adaugaAdresa(Adresa adresa);
-    public void updateAdresa(int idx, Adresa adresa);
-    public void stergeAdresa(int idx);
+    public Adresa getAdresaById(int idx) throws Exception;
+    public void adaugaAdresa(Adresa adresa) throws Exception;
+    public void updateAdresa(int idx, Adresa adresa) throws Exception;
+    public void stergeAdresa(int idx) throws Exception;
 }

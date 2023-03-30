@@ -28,4 +28,12 @@ public class Angajat extends Utilizator{
     public void setPozitie(String pozitie) {
         this.pozitie = pozitie;
     }
+
+    @Override
+    public String toString() {
+        return "Angajat{" +
+                "dataAngajarii='" + dataAngajarii + '\'' +
+                ", pozitie='" + pozitie + '\'' +
+                '}';
+    }
 }

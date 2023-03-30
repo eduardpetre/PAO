@@ -47,4 +47,14 @@ public class Carte {
     public void setEditura(String editura) {
         this.editura = editura;
     }
+
+    @Override
+    public String toString() {
+        return "Carte{" +
+                "id=" + id +
+                ", titlu='" + titlu + '\'' +
+                ", autor='" + autor + '\'' +
+                ", editura='" + editura + '\'' +
+                '}';
+    }
 }

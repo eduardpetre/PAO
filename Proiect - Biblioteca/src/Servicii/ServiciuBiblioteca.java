@@ -22,34 +22,48 @@ public class ServiciuBiblioteca implements InterfataBiblioteca{
         return biblioteci_aux;
     }
 
-    public Biblioteca getBibliotecaById(int idx){
+    public Biblioteca getBibliotecaById(int idx) throws Exception {
         Biblioteca biblioteca = new Biblioteca();
         for(int i = 0; i < this.biblioteci.size(); ++i){
             if(this.biblioteci.get(i).getId() == idx){
-                biblioteca = this.biblioteci.get(i);
+                return this.biblioteci.get(i);
             }
         }
-        return biblioteca;
+        throw new Exception("Biblioteca cu acest id nu exista");
     }
-    public void adaugaBiblioteca(Biblioteca biblioteca){
+    public void adaugaBiblioteca(Biblioteca biblioteca) throws Exception {
+        for(int i = 0; i < this.biblioteci.size(); ++i){
+            if(this.biblioteci.get(i).getId() == biblioteca.getId()){
+                throw new Exception("Biblioteca cu acest id exista deja!");
+            }
+        }
         this.biblioteci.add(biblioteca);
     }
-    public void updateBiblioteca(int idx, Biblioteca biblioteca){
+    public void updateBiblioteca(int idx, Biblioteca biblioteca) throws Exception {
+        boolean updated = false;
         for(int i = 0; i < this.biblioteci.size(); ++i){
             if(this.biblioteci.get(i).getId() == idx){
                 this.biblioteci.remove(i);
                 this.biblioteci.add(i, biblioteca);
-                break;
+                updated = true;
+            } else if (this.biblioteci.get(i).getId() == biblioteca.getId()) {
+                throw new Exception("Exista deja o biblioteca cu acest id!");
             }
         }
+        if (!updated)
+            throw new Exception("Biblioteca cu acest id nu exista!");
     }
 
-    public void stergeBiblioteca(int idx){
+    public void stergeBiblioteca(int idx) throws Exception {
+        boolean deleted = false;
         for(int i = 0; i < this.biblioteci.size(); ++i){
             if(this.biblioteci.get(i).getId() == idx){
                 this.biblioteci.remove(i);
+                deleted = true;
                 break;
             }
         }
+        if (!deleted)
+            throw new Exception("Adresa cu acest id nu exista!");
     }
 }

@@ -18,4 +18,11 @@ public class Cititor extends Utilizator{
     public void setCartiImprumutate(int cartiImprumutate) {
         this.cartiImprumutate = cartiImprumutate;
     }
+
+    @Override
+    public String toString() {
+        return "Cititor{" +
+                "cartiImprumutate=" + cartiImprumutate +
+                '}';
+    }
 }
