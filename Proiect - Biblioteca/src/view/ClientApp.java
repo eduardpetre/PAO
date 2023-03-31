@@ -6,15 +6,17 @@ import Servicii.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class ClientApp {
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
     private final ServiciuAdresa serviciuAdresa = new ServiciuAdresa().getInit();
-    private final ServiciuAngajat serviciuAngajat = new ServiciuAngajat();
+    private final ServiciuAngajat serviciuAngajat = new ServiciuAngajat().getInit();
     private final ServiciuBiblioteca serviciuBiblioteca = new ServiciuBiblioteca().getInit();
     private final ServiciuCarte serviciuCarte = new ServiciuCarte().getInit();
-    private final ServiciuCititor serviciuCititor = new ServiciuCititor();
+    private final ServiciuCititor serviciuCititor = new ServiciuCititor().getInit();
+    private final ServiciuImprumut serviciuImprumut = new ServiciuImprumut().getInit();
 
     public static void main(String[] args) {
         ClientApp clientApp = new ClientApp();
@@ -23,17 +25,41 @@ public class ClientApp {
         }
     }
 
-    private void showMenu() {
+    private void showMenu(){
+        System.out.println("------------------------------------------------------------------------------");
+        System.out.println("What do you want to do?");
+        System.out.println("1. Manager");
+        System.out.println("2. Cititor");
+        System.out.println("0. exit");
+
+        int option = readOption(2);
+        switch (option) {
+            case 1: {
+                meniuManager();
+                break;
+            }
+            case 2: {
+                meniuCititor();
+                break;
+            }
+            case 0: {
+                scanner.close();
+                System.exit(0);
+            }
+        }
+    }
+
+    private void meniuManager() {
         System.out.println("------------------------------------------------------------------------------");
         System.out.println("Welcome to Library Management Platform");
         System.out.println("What do you want to do?");
         System.out.println("1. Meniu adrese");
         System.out.println("2. Meniu biblioteci");
         System.out.println("3. Meniu carti");
-        System.out.println("4. Meniu utilizatori");
-        System.out.println("0. exit");
+        System.out.println("4. Meniu angajati");
+        System.out.println("0. inapoi");
 
-        int option = readOption(5);
+        int option = readOption(4);
         switch (option) {
             case 1: {
                 meniuAdresa();
@@ -48,19 +74,15 @@ public class ClientApp {
                 break;
             }
             case 4: {
-//                meniuUtilizatori();
+                meniuAngajat();
                 break;
             }
             case 0: {
-                scanner.close();
-                System.exit(0);
+                showMenu();
+                break;
             }
         }
     }
-
-//    private void execute(int option) {
-//
-//    }
 
     private void meniuAdresa() {
         while (true) {
@@ -97,7 +119,7 @@ public class ClientApp {
                     break;
                 }
                 case 0: {
-                    showMenu();
+                    meniuManager();
                     break;
                 }
             }
@@ -209,7 +231,7 @@ public class ClientApp {
                     break;
                 }
                 case 0: {
-                    showMenu();
+                    meniuManager();
                     break;
                 }
             }
@@ -366,7 +388,7 @@ public class ClientApp {
                     break;
                 }
                 case 0: {
-                    showMenu();
+                    meniuManager();
                     break;
                 }
             }
@@ -419,7 +441,7 @@ public class ClientApp {
     }
 
     private void stergeCarte(){
-        System.out.println("Sterge adresa cu id-ul: ");
+        System.out.println("Sterge cartea cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         try {
             serviciuCarte.stergeCarte(id);
@@ -441,6 +463,269 @@ public class ClientApp {
         return new Carte(id, titlu, autor, editura);
     }
 
+    private void meniuAngajat(){
+        while (true) {
+            System.out.println("------------------------------------------------------------------------------");
+            System.out.println("Meniu angajat");
+            System.out.println("De ce ai nevoie?");
+            System.out.println("1. Adauga un angajat");
+            System.out.println("2. Arata toti angajatii");
+            System.out.println("3. Cauta un angajat dupa id");
+            System.out.println("4. Actualizeaza datele despre un angajat");
+            System.out.println("5. Sterge un angajat");
+            System.out.println("0. Inapoi");
+
+            int option = readOption(5);
+            switch (option) {
+                case 1: {
+                    adaugaAngajat();
+                    break;
+                }
+                case 2: {
+                    afiseazaAngajatii();
+                    break;
+                }
+                case 3: {
+                    cautaAngajatDupaId();
+                    break;
+                }
+                case 4: {
+                    actualizeazaAngajat();
+                    break;
+                }
+                case 5: {
+                    stergeAngajat();
+                    break;
+                }
+                case 0: {
+                    meniuManager();
+                    break;
+                }
+            }
+        }
+
+    }
+
+    private void adaugaAngajat(){
+        System.out.println("Adauga angajat");
+        Angajat angajat = citesteAngajat();
+        try {
+            serviciuAngajat.adaugaAngajat(angajat);
+            System.out.println("Un nou angajat a fost inregistrat: " + angajat);
+        } catch (Exception exception){
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private void afiseazaAngajatii(){
+        System.out.println("Afiseaza toti angajatii inregistrati: ");
+        Set<Angajat> angajati = serviciuAngajat.getAngajati();
+        if(angajati.isEmpty())
+            System.out.println("Nu exista angajati inregistrati!");
+        else
+            angajati.forEach(System.out::println);
+    }
+
+    private void cautaAngajatDupaId(){
+        System.out.println("Cauti angajatul cu id-ul: ");
+        int id = readOption(Integer.MAX_VALUE);
+        try {
+            Angajat angajat = serviciuAngajat.getAngajatById(id);
+            System.out.println("Angajatul a fost gasit: " + angajat);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private void actualizeazaAngajat(){
+        System.out.println("Actualizeaza angajatul cu id-ul: ");
+        int id = readOption(Integer.MAX_VALUE);
+        System.out.println("Citeste noul angajat: ");
+        Angajat angajat = citesteAngajat();
+        try {
+            serviciuAngajat.updateAngajat(id, angajat);
+            System.out.println("Angajatul a fost actualizat cu succes!");
+        } catch (Exception exception){
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private void stergeAngajat(){
+        System.out.println("Sterge angajatul cu id-ul: ");
+        int id = readOption(Integer.MAX_VALUE);
+        try {
+            serviciuAngajat.stergeAngajat(id);
+            System.out.println("Angajatul a fost sters cu succes");
+        } catch (Exception exception){
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private Angajat citesteAngajat(){
+        System.out.println("Id: ");
+        int id = readOption(Integer.MAX_VALUE);
+        System.out.println("Nume: ");
+        String nume = scanner.nextLine();
+        System.out.println("Email: ");
+        String email = scanner.nextLine();
+        System.out.println("Telefon: ");
+        String telefon = scanner.nextLine();
+        System.out.println("Data angajarii: ");
+        String dataAngajarii = scanner.nextLine();
+        System.out.println("Pozitie: ");
+        String pozitie = scanner.nextLine();
+        return new Angajat(id, nume, email, telefon, dataAngajarii, pozitie);
+    }
+
+    private void afiseazaCititorii(){
+        System.out.println("Afiseaza toti cititorii inregistrati: ");
+        Set<Cititor> cititori = serviciuCititor.getCititori();
+        if(cititori.isEmpty())
+            System.out.println("Nu exista cititori inregistrati!");
+        else
+            cititori.forEach(System.out::println);
+    }
+
+    private void adaugaCititor(){
+        System.out.println("Adauga cititor");
+        Cititor cititor = citesteCititor();
+        try {
+            serviciuCititor.adaugaCititor(cititor);
+            System.out.println("Un nou cititor a fost inregistrat: " + cititor);
+        } catch (Exception exception){
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private Cititor citesteCititor(){
+        System.out.println("Id: ");
+        int id = readOption(Integer.MAX_VALUE);
+        System.out.println("Nume: ");
+        String nume = scanner.nextLine();
+        System.out.println("Email: ");
+        String email = scanner.nextLine();
+        System.out.println("Telefon: ");
+        String telefon = scanner.nextLine();
+        System.out.println("Elev: ");
+        System.out.println("1. Da");
+        System.out.println("2. Nu");
+        int opt = readOption(2);
+        if (opt == 1)
+            return new Cititor(id, nume, email, telefon, true);
+        else if (opt == 2)
+            return new Cititor(id, nume, email, telefon, false);
+        meniuCititor();
+        return null;
+    }
+
+    private void meniuCititor() {
+        System.out.println("------------------------------------------------------------------------------");
+        System.out.println("Welcome to Library Platform");
+        System.out.println("1. Arata toate cartile disponibile.");
+        System.out.println("2. Imprumuta o carte.");
+        System.out.println("3. Returneaza o carte.");
+        System.out.println("0. inapoi");
+
+        int option = readOption(3);
+        switch (option) {
+            case 1: {
+                afiseazaCartile();
+                meniuCititor();
+                break;
+            }
+            case 2: {
+                adaugaImprumut();
+                meniuCititor();
+                break;
+            }
+            case 3: {
+                stergeImprumut();
+                meniuCititor();
+                break;
+            }
+            case 0: {
+                showMenu();
+                break;
+            }
+        }
+    }
+
+    private void adaugaImprumut(){
+        System.out.println("Imprumuta o carte: ");
+        try {
+            Imprumut imprumut = citesteImprumut();
+            serviciuImprumut.adaugaImprumut(imprumut);
+            serviciuCarte.stergeCarte(imprumut.getCarte().getId());
+            System.out.println("Cartea a fost imprumutata cu succes: " + imprumut);
+        } catch (Exception exception){
+            System.out.println(exception.getMessage());
+        }
+    }
+    private void stergeImprumut(){
+        System.out.println("Returneaza imprumutul cu id-ul: ");
+        int id = readOption(Integer.MAX_VALUE);
+        try {
+            serviciuCarte.adaugaCarte(serviciuImprumut.getImprumutById(id).getCarte());
+            serviciuImprumut.stergeImprumut(id);
+            System.out.println("Cartea a fost returnata cu succes");
+        } catch (Exception exception){
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private Imprumut citesteImprumut() throws Exception {
+        System.out.println("Cititor");
+        System.out.println("Alege contul tau: ");
+
+        Cititor cititor = null;
+        while (true) {
+            System.out.println("------------------------------------------------------------------------------");
+            System.out.println("1. Ai deja un cont");
+            System.out.println("2. Inregistreaza un cont nou");
+            System.out.println("0. Iesire");
+
+            int optionCont = readOption(2);
+            if (optionCont == 0) {
+                break;
+            }
+            if (optionCont == 1) {
+                afiseazaCititorii();
+                System.out.println("Id-ul contului dorit: ");
+                int idCont = readOption(Integer.MAX_VALUE);
+                try {
+                    cititor = serviciuCititor.getCititorById(idCont);
+                    break;
+                } catch (Exception exception) {
+                    System.out.println(exception.getMessage());
+                }
+            } else if (optionCont == 2) {
+                adaugaCititor();
+            }
+        }
+
+        System.out.println("Carte");
+        System.out.println("Alege cartea dorita: ");
+
+        Carte carte = null;
+        while(true) {
+            afiseazaCartile();
+            System.out.println("Id-ul cartii dorite/ 0 pentru iesire: ");
+            int idCarte = readOption(Integer.MAX_VALUE);
+            if (idCarte == 0) {
+                break;
+            }
+            try {
+                carte = serviciuCarte.getCarteById(idCarte);
+                break;
+            } catch (Exception exception) {
+                System.out.println(exception.getMessage());
+            }
+        }
+        if (carte == null || cititor == null)
+            throw new Exception("Ceva nu a mers bine!");
+        return new Imprumut(carte, cititor);
+    }
+
     private int readOption(int x) {
         int option = -1;
         do {
@@ -456,7 +741,7 @@ public class ClientApp {
     }
 
     private int readInt() throws Exception {
-        String line = scanner.next();
+        String line = scanner.nextLine();
         if (line.matches("^\\d+$")) {
             return Integer.parseInt(line);
         } else {

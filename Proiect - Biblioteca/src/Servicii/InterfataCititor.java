@@ -1,12 +1,12 @@
 package Servicii;
 
 import Entitati.Cititor;
-import java.util.List;
+import java.util.Set;
 
 public interface InterfataCititor {
-    public List<Cititor> getCititori();
-    public Cititor getCititorById(int idx);
-    public void adaugaCititor(Cititor cititor);
-    public void updateCititor(int idx, Cititor cititor);
-    public void stergeCititor(int idx);
+    public Set<Cititor> getCititori();
+    public Cititor getCititorById(int idx) throws Exception;
+    public void adaugaCititor(Cititor cititor) throws Exception;
+    public void updateCititor(int idx, Cititor cititor) throws Exception;
+    public void stergeCititor(int idx) throws Exception;
 }

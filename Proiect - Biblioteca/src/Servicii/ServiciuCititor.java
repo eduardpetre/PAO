@@ -1,10 +1,11 @@
 package Servicii;
 
+import Entitati.Angajat;
 import Entitati.Cititor;
 import java.util.*;
 
 public class ServiciuCititor implements InterfataCititor{
-    private List<Cititor> cititori = new ArrayList<>();
+    private Set<Cititor> cititori = new HashSet<Cititor>();;
     private static ServiciuCititor init;
 
     public ServiciuCititor() {
@@ -16,40 +17,53 @@ public class ServiciuCititor implements InterfataCititor{
         return init;
     }
 
-    public List<Cititor> getCititori() {
-        List<Cititor> cititori_aux = new ArrayList<>();
+    public Set<Cititor> getCititori() {
+        Set<Cititor> cititori_aux = new HashSet<Cititor>();
         cititori_aux.addAll(this.cititori);
         return cititori_aux;
     }
 
-    public Cititor getCititorById(int idx){
-        Cititor angajat = new Cititor();
-        for(int i = 0; i < this.cititori.size(); ++i){
-            if(this.cititori.get(i).getId() == idx){
-                angajat = this.cititori.get(i);
+    public Cititor getCititorById(int idx) throws Exception {
+        for(Cititor c: cititori){
+            if(c.getId() == idx){
+                return c;
             }
         }
-        return angajat;
+        throw new Exception("Cititorul cu acest id nu exista!");
     }
-    public void adaugaCititor(Cititor cititor){
+    public void adaugaCititor(Cititor cititor) throws Exception {
+        for(Cititor c: cititori){
+            if(c.getId() == cititor.getId()){
+                throw new Exception("Angajatul cu acest id exista deja!");
+            }
+        }
         this.cititori.add(cititor);
     }
-    public void updateCititor(int idx, Cititor cititor){
-        for(int i = 0; i < this.cititori.size(); ++i){
-            if(this.cititori.get(i).getId() == idx){
-                this.cititori.remove(i);
-                this.cititori.add(i, cititor);
-                break;
+    public void updateCititor(int idx, Cititor cititor) throws Exception {
+        boolean updated = false;
+        for(Cititor c: cititori){
+            if(c.getId() == idx){
+                this.cititori.remove(c);
+                this.cititori.add(cititor);
+                updated = true;
+            } else if (c.getId() == cititor.getId()) {
+                throw new Exception("Exista deja un cititor cu acest id!");
             }
         }
+        if (!updated)
+            throw new Exception("Cititorul cu acest id nu exista!");
     }
 
-    public void stergeCititor(int idx){
-        for(int i = 0; i < this.cititori.size(); ++i){
-            if(this.cititori.get(i).getId() == idx){
-                this.cititori.remove(i);
+    public void stergeCititor(int idx) throws Exception {
+        boolean deleted = false;
+        for(Cititor c: cititori){
+            if(c.getId() == idx){
+                this.cititori.remove(c);
+                deleted = true;
                 break;
             }
         }
+        if (!deleted)
+            throw new Exception("Cititorul cu acest id nu exista!");
     }
 }

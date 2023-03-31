@@ -32,7 +32,8 @@ public class Angajat extends Utilizator{
     @Override
     public String toString() {
         return "Angajat{" +
-                "dataAngajarii='" + dataAngajarii + '\'' +
+                "id='"+ getId() + '\'' +
+                ", dataAngajarii='" + dataAngajarii + '\'' +
                 ", pozitie='" + pozitie + '\'' +
                 '}';
     }

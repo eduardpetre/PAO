@@ -1,28 +1,30 @@
 package Entitati;
 
 public class Cititor extends Utilizator{
-    private int cartiImprumutate;
+    private boolean elev;
 
     public Cititor() {
     }
 
-    public Cititor(int id, String nume, String email, String telefon, int cartiImprumutate) {
+    public Cititor(int id, String nume, String email, String telefon, boolean elev) {
         super(id, nume, email, telefon);
-        this.cartiImprumutate = cartiImprumutate;
+        this.elev = elev;
     }
 
-    public int getCartiImprumutate() {
-        return cartiImprumutate;
+    public boolean isElev() {
+        return elev;
     }
 
-    public void setCartiImprumutate(int cartiImprumutate) {
-        this.cartiImprumutate = cartiImprumutate;
+    public void setElev(boolean elev) {
+        this.elev = elev;
     }
 
     @Override
     public String toString() {
         return "Cititor{" +
-                "cartiImprumutate=" + cartiImprumutate +
+                "id='"+ getId() + '\'' +
+                ", nume='" + getNume() + '\'' +
+                ", elev=" + elev +
                 '}';
     }
 }
