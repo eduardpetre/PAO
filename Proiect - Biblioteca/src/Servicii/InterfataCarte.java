@@ -1,6 +1,5 @@
 package Servicii;
 
-import Entitati.Adresa;
 import Entitati.Carte;
 import java.util.List;
 

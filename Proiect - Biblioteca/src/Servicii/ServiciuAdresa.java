@@ -1,7 +1,6 @@
 package Servicii;
 
 import Entitati.Adresa;
-
 import java.util.*;
 
 public class ServiciuAdresa implements InterfataAdresa {

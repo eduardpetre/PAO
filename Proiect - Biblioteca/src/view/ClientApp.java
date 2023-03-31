@@ -2,10 +2,7 @@ package view;
 
 import Entitati.*;
 import Servicii.*;
-import com.sun.jdi.IntegerValue;
 
-import java.beans.Expression;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -467,4 +464,3 @@ public class ClientApp {
         }
     }
 }
-
