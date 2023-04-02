@@ -25,7 +25,17 @@ public class ClientApp {
         }
     }
 
-    private void showMenu(){
+    private ClientApp(){}
+
+    private static ClientApp init;
+    public static ClientApp getInit(){
+        if(init == null){
+            init = new ClientApp();
+        }
+        return init;
+    }
+
+    public void showMenu(){
         System.out.println("------------------------------------------------------------------------------");
         System.out.println("What do you want to do?");
         System.out.println("1. Manager");
@@ -186,13 +196,13 @@ public class ClientApp {
         System.out.println("Id: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Tara: ");
-        String tara = scanner.nextLine();
+        String tara = readString(scanner.nextLine());
         System.out.println("Oras: ");
-        String oras = scanner.nextLine();
+        String oras = readString(scanner.nextLine());
         System.out.println("Strada: ");
-        String strada = scanner.nextLine();
+        String strada = readString(scanner.nextLine());
         System.out.println("Numar: ");
-        String nr = scanner.nextLine();
+        String nr = readString(scanner.nextLine());
         return new Adresa(id, tara, oras, strada, nr);
     }
 
@@ -297,7 +307,7 @@ public class ClientApp {
         System.out.println("Id: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Nume: ");
-        String nume = scanner.nextLine();
+        String nume = readString(scanner.nextLine());
         System.out.println("Adresa: ");
 
         Adresa adresa = null;
@@ -455,11 +465,11 @@ public class ClientApp {
         System.out.println("Id: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Titlu: ");
-        String titlu = scanner.nextLine();
+        String titlu = readString(scanner.nextLine());
         System.out.println("Autor: ");
-        String autor = scanner.nextLine();
+        String autor = readString(scanner.nextLine());
         System.out.println("Editura: ");
-        String editura = scanner.nextLine();
+        String editura = readString(scanner.nextLine());
         return new Carte(id, titlu, autor, editura);
     }
 
@@ -565,15 +575,15 @@ public class ClientApp {
         System.out.println("Id: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Nume: ");
-        String nume = scanner.nextLine();
+        String nume = readString(scanner.nextLine());
         System.out.println("Email: ");
-        String email = scanner.nextLine();
+        String email = readString(scanner.nextLine());
         System.out.println("Telefon: ");
-        String telefon = scanner.nextLine();
+        String telefon = readString(scanner.nextLine());
         System.out.println("Data angajarii: ");
-        String dataAngajarii = scanner.nextLine();
+        String dataAngajarii = readString(scanner.nextLine());
         System.out.println("Pozitie: ");
-        String pozitie = scanner.nextLine();
+        String pozitie = readString(scanner.nextLine());
         return new Angajat(id, nume, email, telefon, dataAngajarii, pozitie);
     }
 
@@ -601,11 +611,11 @@ public class ClientApp {
         System.out.println("Id: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Nume: ");
-        String nume = scanner.nextLine();
+        String nume = readString(scanner.nextLine());
         System.out.println("Email: ");
-        String email = scanner.nextLine();
+        String email = readString(scanner.nextLine());
         System.out.println("Telefon: ");
-        String telefon = scanner.nextLine();
+        String telefon = readString(scanner.nextLine());
         System.out.println("Elev: ");
         System.out.println("1. Da");
         System.out.println("2. Nu");
@@ -724,6 +734,14 @@ public class ClientApp {
         if (carte == null || cititor == null)
             throw new Exception("Ceva nu a mers bine!");
         return new Imprumut(carte, cititor);
+    }
+
+    private String readString(String s){
+        while (s.trim().isEmpty()) {
+            System.out.print("Incercati din nou! Input-ul nu poate fi gol: ");
+            s = scanner.nextLine();
+        }
+        return s;
     }
 
     private int readOption(int x) {
