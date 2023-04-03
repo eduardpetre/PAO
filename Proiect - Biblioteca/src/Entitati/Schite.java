@@ -22,7 +22,8 @@ public class Schite extends Carte{
     @Override
     public String toString() {
         return "Schite{" +
-                "nrActe=" + nrActe +
+                super.toString() +
+                ", nrActe=" + nrActe +
                 '}';
     }
 }

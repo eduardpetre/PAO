@@ -22,7 +22,8 @@ public class Poezie extends Carte{
     @Override
     public String toString() {
         return "Poezie{" +
-                "nrVolum=" + nrVolum +
+                super.toString() +
+                ", nrVolum=" + nrVolum +
                 '}';
     }
 }

@@ -22,7 +22,8 @@ public class Roman extends Carte{
     @Override
     public String toString() {
         return "Roman{" +
-                "nrCapitole=" + nrCapitole +
+                super.toString() +
+                ", nrCapitole=" + nrCapitole +
                 '}';
     }
 }

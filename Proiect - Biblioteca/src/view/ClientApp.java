@@ -407,8 +407,23 @@ public class ClientApp {
     }
 
     private void adaugaCarte(){
-        System.out.println("Adauga carte");
-        Carte carte = citesteCarte();
+        System.out.println("Adauga carte: ");
+        System.out.println("Selecteaza tipul de carte: ");
+        System.out.println("1. Roman");
+        System.out.println("2. Poezie");
+        System.out.println("3. Schite");
+        int opt = readOption(4);
+        Carte carte = null;
+        if(opt == 1){
+            Roman roman = citesteRoman();
+            carte = roman;
+        } else if (opt == 2) {
+            Poezie poezie = citestePoezie();
+            carte = poezie;
+        } else if (opt == 3){
+            Schite schite = citesteSchite();
+            carte = schite;
+        }
         try {
             serviciuCarte.adaugaCarte(carte);
             System.out.println("O noua carte a fost inregistrata: " + carte);
@@ -440,8 +455,23 @@ public class ClientApp {
     private void actualizeazaCarte(){
         System.out.println("Actualizeaza cartea cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
-        System.out.println("Citeste noua carte: ");
-        Carte carte = citesteCarte();
+        System.out.println("Citeste noua carte");
+        System.out.println("Selecteaza tipul de carte: ");
+        System.out.println("1. Roman");
+        System.out.println("2. Poezie");
+        System.out.println("3. Schite");
+        int opt = readOption(4);
+        Carte carte = null;
+        if(opt == 1){
+            Roman roman = citesteRoman();
+            carte = roman;
+        } else if (opt == 2) {
+            Poezie poezie = citestePoezie();
+            carte = poezie;
+        } else if (opt == 3){
+            Schite schite = citesteSchite();
+            carte = schite;
+        }
         try {
             serviciuCarte.updateCarte(id, carte);
             System.out.println("Cartea a fost actualizata cu succes!");
@@ -471,6 +501,27 @@ public class ClientApp {
         System.out.println("Editura: ");
         String editura = readString(scanner.nextLine());
         return new Carte(id, titlu, autor, editura);
+    }
+
+    private Roman citesteRoman(){
+        Carte carte = citesteCarte();
+        System.out.println("Nr capitole: ");
+        int nrCapitole = readOption(Integer.MAX_VALUE);
+        return new Roman(carte.getId(), carte.getTitlu(), carte.getAutor(), carte.getEditura(), nrCapitole);
+    }
+
+    private Poezie citestePoezie(){
+        Carte carte = citesteCarte();
+        System.out.println("Nr volum: ");
+        int nrVolum = readOption(Integer.MAX_VALUE);
+        return new Poezie(carte.getId(), carte.getTitlu(), carte.getAutor(), carte.getEditura(), nrVolum);
+    }
+
+    private Schite citesteSchite(){
+        Carte carte = citesteCarte();
+        System.out.println("Nr acte: ");
+        int nrActe = readOption(Integer.MAX_VALUE);
+        return new Schite(carte.getId(), carte.getTitlu(), carte.getAutor(), carte.getEditura(), nrActe);
     }
 
     private void meniuAngajat(){
