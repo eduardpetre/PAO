@@ -1,4 +1,4 @@
-package Entitati;
+package entitati;
 
 public abstract class Utilizator {
     private int id;

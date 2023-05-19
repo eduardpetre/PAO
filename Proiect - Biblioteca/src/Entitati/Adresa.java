@@ -1,4 +1,4 @@
-package Entitati;
+package entitati;
 
 public class Adresa {
     private int id;

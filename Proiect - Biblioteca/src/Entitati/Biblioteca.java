@@ -1,4 +1,4 @@
-package Entitati;
+package entitati;
 
 import java.util.List;
 

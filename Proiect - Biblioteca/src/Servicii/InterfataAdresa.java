@@ -1,12 +1,17 @@
-package Servicii;
+package servicii;
 
-import Entitati.Adresa;
+import entitati.Adresa;
+
 import java.util.List;
 
 public interface InterfataAdresa {
     public List<Adresa> getAdrese();
+
     public Adresa getAdresaById(int idx) throws Exception;
-    public void adaugaAdresa(Adresa adresa) throws Exception;
+
+    public Adresa adaugaAdresa(Adresa adresa) throws Exception;
+
     public void updateAdresa(int idx, Adresa adresa) throws Exception;
+
     public void stergeAdresa(int idx) throws Exception;
 }

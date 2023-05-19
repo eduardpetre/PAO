@@ -1,7 +1,8 @@
 package view;
 
-import Entitati.*;
-import Servicii.*;
+import entitati.*;
+import servicii.*;
+import persistenta.util.Audit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +11,13 @@ import java.util.Set;
 
 public class ClientApp {
     private final Scanner scanner = new Scanner(System.in);
-
-    private final ServiciuAdresa serviciuAdresa = new ServiciuAdresa().getInit();
-    private final ServiciuAngajat serviciuAngajat = new ServiciuAngajat().getInit();
-    private final ServiciuBiblioteca serviciuBiblioteca = new ServiciuBiblioteca().getInit();
-    private final ServiciuCarte serviciuCarte = new ServiciuCarte().getInit();
-    private final ServiciuCititor serviciuCititor = new ServiciuCititor().getInit();
-    private final ServiciuImprumut serviciuImprumut = new ServiciuImprumut().getInit();
+    private final ServiciuAdresa serviciuAdresa = new ServiciuAdresa();
+    private final ServiciuAngajat serviciuAngajat = new ServiciuAngajat();
+    private final ServiciuBiblioteca serviciuBiblioteca = new ServiciuBiblioteca();
+    private final ServiciuCarte serviciuCarte = new ServiciuCarte();
+    private final ServiciuCititor serviciuCititor = new ServiciuCititor();
+    private final ServiciuImprumut serviciuImprumut = new ServiciuImprumut();
+    Audit audit = Audit.getInit();
 
     public static void main(String[] args) {
         ClientApp clientApp = new ClientApp();
@@ -25,17 +26,19 @@ public class ClientApp {
         }
     }
 
-    private ClientApp(){}
+    private ClientApp() {
+    }
 
     private static ClientApp init;
-    public static ClientApp getInit(){
-        if(init == null){
+
+    public static ClientApp getInit() {
+        if (init == null) {
             init = new ClientApp();
         }
         return init;
     }
 
-    public void showMenu(){
+    public void showMenu() {
         System.out.println("------------------------------------------------------------------------------");
         System.out.println("What do you want to do?");
         System.out.println("1. Manager");
@@ -54,6 +57,7 @@ public class ClientApp {
             }
             case 0: {
                 scanner.close();
+                audit.close();
                 System.exit(0);
             }
         }
@@ -110,22 +114,27 @@ public class ClientApp {
             switch (option) {
                 case 1: {
                     adaugaAdresa();
+                    audit.log("Adaugare adresa");
                     break;
                 }
                 case 2: {
                     afiseazaAdresele();
+                    audit.log("Afisare adrese");
                     break;
                 }
                 case 3: {
                     cautaAdresaDupaId();
+                    audit.log("Cautare adresa");
                     break;
                 }
                 case 4: {
                     actualizeazaAdresa();
+                    audit.log("Actualizare adresa");
                     break;
                 }
                 case 5: {
                     stergeAdresa();
+                    audit.log("Stergere adresa");
                     break;
                 }
                 case 0: {
@@ -137,27 +146,27 @@ public class ClientApp {
 
     }
 
-    private void adaugaAdresa(){
+    private void adaugaAdresa() {
         System.out.println("Adauga adresa");
         Adresa adresa = citesteAdresa();
         try {
             serviciuAdresa.adaugaAdresa(adresa);
             System.out.println("O noua adresa a fost inregistrata: " + adresa);
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private void afiseazaAdresele(){
+    private void afiseazaAdresele() {
         System.out.println("Afiseaza toate adresele inregistrate: ");
         List<Adresa> adrese = serviciuAdresa.getAdrese();
-        if(adrese.isEmpty())
+        if (adrese.isEmpty())
             System.out.println("Nu exista adrese inregistrate!");
         else
             adrese.forEach(System.out::println);
     }
 
-    private void cautaAdresaDupaId(){
+    private void cautaAdresaDupaId() {
         System.out.println("Cauti adresa cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         try {
@@ -168,7 +177,7 @@ public class ClientApp {
         }
     }
 
-    private void actualizeazaAdresa(){
+    private void actualizeazaAdresa() {
         System.out.println("Actualizeaza adresa cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Citeste noua adresa: ");
@@ -176,23 +185,23 @@ public class ClientApp {
         try {
             serviciuAdresa.updateAdresa(id, adresa);
             System.out.println("Adresa a fost actualizata cu succes!");
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private void stergeAdresa(){
+    private void stergeAdresa() {
         System.out.println("Sterge adresa cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         try {
             serviciuAdresa.stergeAdresa(id);
             System.out.println("Adresa a fost stearsa cu succes");
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private Adresa citesteAdresa(){
+    private Adresa citesteAdresa() {
         System.out.println("Id: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Tara: ");
@@ -222,22 +231,27 @@ public class ClientApp {
             switch (option) {
                 case 1: {
                     adaugaBiblioteca();
+                    audit.log("Adaugare biblioteca");
                     break;
                 }
                 case 2: {
                     afiseazaBibliotecile();
+                    audit.log("Afisare biblioteci");
                     break;
                 }
                 case 3: {
                     cautaBibliotecaDupaId();
+                    audit.log("Cautare biblioteca");
                     break;
                 }
                 case 4: {
                     actualizeazaBiblioteca();
+                    audit.log("Actualizare biblioteca");
                     break;
                 }
                 case 5: {
                     stergeBiblioteca();
+                    audit.log("Stergere biblioteca");
                     break;
                 }
                 case 0: {
@@ -248,27 +262,27 @@ public class ClientApp {
         }
     }
 
-    private void adaugaBiblioteca(){
+    private void adaugaBiblioteca() {
         System.out.println("Adauga biblioteca");
         Biblioteca biblioteca = citesteBiblioteca();
         try {
             serviciuBiblioteca.adaugaBiblioteca(biblioteca);
             System.out.println("O noua biblioteca a fost inregistrata: " + biblioteca);
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private void afiseazaBibliotecile(){
+    private void afiseazaBibliotecile() {
         System.out.println("Afiseaza toate bibliotecile inregistrate: ");
         List<Biblioteca> biblioteci = serviciuBiblioteca.getBiblioteci();
-        if(biblioteci.isEmpty())
+        if (biblioteci.isEmpty())
             System.out.println("Nu exista biblioteci inregistrate!");
         else
             biblioteci.forEach(System.out::println);
     }
 
-    private void cautaBibliotecaDupaId(){
+    private void cautaBibliotecaDupaId() {
         System.out.println("Cauti biblioteca cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         try {
@@ -279,7 +293,7 @@ public class ClientApp {
         }
     }
 
-    private void actualizeazaBiblioteca(){
+    private void actualizeazaBiblioteca() {
         System.out.println("Actualizeaza biblioteca cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Citeste noua biblioteca: ");
@@ -287,18 +301,18 @@ public class ClientApp {
         try {
             serviciuBiblioteca.updateBiblioteca(id, biblioteca);
             System.out.println("Biblioteca a fost actualizata cu succes!");
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private void stergeBiblioteca(){
+    private void stergeBiblioteca() {
         System.out.println("Sterge biblioteca cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         try {
             serviciuBiblioteca.stergeBiblioteca(id);
             System.out.println("Biblioteca a fost stearsa cu succes");
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
@@ -379,22 +393,27 @@ public class ClientApp {
             switch (option) {
                 case 1: {
                     adaugaCarte();
+                    audit.log("Adaugare carte");
                     break;
                 }
                 case 2: {
                     afiseazaCartile();
+                    audit.log("Afisare carti");
                     break;
                 }
                 case 3: {
                     cautaCarteDupaId();
+                    audit.log("Cautare carte");
                     break;
                 }
                 case 4: {
                     actualizeazaCarte();
+                    audit.log("Actualizare carte");
                     break;
                 }
                 case 5: {
                     stergeCarte();
+                    audit.log("Stergere carte");
                     break;
                 }
                 case 0: {
@@ -406,7 +425,7 @@ public class ClientApp {
 
     }
 
-    private void adaugaCarte(){
+    private void adaugaCarte() {
         System.out.println("Adauga carte: ");
         System.out.println("Selecteaza tipul de carte: ");
         System.out.println("1. Roman");
@@ -414,34 +433,34 @@ public class ClientApp {
         System.out.println("3. Schite");
         int opt = readOption(4);
         Carte carte = null;
-        if(opt == 1){
+        if (opt == 1) {
             Roman roman = citesteRoman();
             carte = roman;
         } else if (opt == 2) {
             Poezie poezie = citestePoezie();
             carte = poezie;
-        } else if (opt == 3){
+        } else if (opt == 3) {
             Schite schite = citesteSchite();
             carte = schite;
         }
         try {
             serviciuCarte.adaugaCarte(carte);
             System.out.println("O noua carte a fost inregistrata: " + carte);
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private void afiseazaCartile(){
+    private void afiseazaCartile() {
         System.out.println("Afiseaza toate cartile inregistrate: ");
         List<Carte> carti = serviciuCarte.getCarti();
-        if(carti.isEmpty())
+        if (carti.isEmpty())
             System.out.println("Nu exista carti inregistrate!");
         else
             carti.forEach(System.out::println);
     }
 
-    private void cautaCarteDupaId(){
+    private void cautaCarteDupaId() {
         System.out.println("Cauti cartea cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         try {
@@ -452,7 +471,7 @@ public class ClientApp {
         }
     }
 
-    private void actualizeazaCarte(){
+    private void actualizeazaCarte() {
         System.out.println("Actualizeaza cartea cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Citeste noua carte");
@@ -462,36 +481,36 @@ public class ClientApp {
         System.out.println("3. Schite");
         int opt = readOption(4);
         Carte carte = null;
-        if(opt == 1){
+        if (opt == 1) {
             Roman roman = citesteRoman();
             carte = roman;
         } else if (opt == 2) {
             Poezie poezie = citestePoezie();
             carte = poezie;
-        } else if (opt == 3){
+        } else if (opt == 3) {
             Schite schite = citesteSchite();
             carte = schite;
         }
         try {
             serviciuCarte.updateCarte(id, carte);
             System.out.println("Cartea a fost actualizata cu succes!");
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private void stergeCarte(){
+    private void stergeCarte() {
         System.out.println("Sterge cartea cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         try {
             serviciuCarte.stergeCarte(id);
             System.out.println("Cartea a fost stearsa cu succes");
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private Carte citesteCarte(){
+    private Carte citesteCarte() {
         System.out.println("Id: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Titlu: ");
@@ -503,28 +522,28 @@ public class ClientApp {
         return new Carte(id, titlu, autor, editura);
     }
 
-    private Roman citesteRoman(){
+    private Roman citesteRoman() {
         Carte carte = citesteCarte();
         System.out.println("Nr capitole: ");
         int nrCapitole = readOption(Integer.MAX_VALUE);
         return new Roman(carte.getId(), carte.getTitlu(), carte.getAutor(), carte.getEditura(), nrCapitole);
     }
 
-    private Poezie citestePoezie(){
+    private Poezie citestePoezie() {
         Carte carte = citesteCarte();
         System.out.println("Nr volum: ");
         int nrVolum = readOption(Integer.MAX_VALUE);
         return new Poezie(carte.getId(), carte.getTitlu(), carte.getAutor(), carte.getEditura(), nrVolum);
     }
 
-    private Schite citesteSchite(){
+    private Schite citesteSchite() {
         Carte carte = citesteCarte();
         System.out.println("Nr acte: ");
         int nrActe = readOption(Integer.MAX_VALUE);
         return new Schite(carte.getId(), carte.getTitlu(), carte.getAutor(), carte.getEditura(), nrActe);
     }
 
-    private void meniuAngajat(){
+    private void meniuAngajat() {
         while (true) {
             System.out.println("------------------------------------------------------------------------------");
             System.out.println("Meniu angajat");
@@ -540,22 +559,27 @@ public class ClientApp {
             switch (option) {
                 case 1: {
                     adaugaAngajat();
+                    audit.log("Adaugare angajat");
                     break;
                 }
                 case 2: {
                     afiseazaAngajatii();
+                    audit.log("Afisare angajati");
                     break;
                 }
                 case 3: {
                     cautaAngajatDupaId();
+                    audit.log("Cautare angajat");
                     break;
                 }
                 case 4: {
                     actualizeazaAngajat();
+                    audit.log("Actualizare angajat");
                     break;
                 }
                 case 5: {
                     stergeAngajat();
+                    audit.log("Stergere angajat");
                     break;
                 }
                 case 0: {
@@ -567,27 +591,27 @@ public class ClientApp {
 
     }
 
-    private void adaugaAngajat(){
+    private void adaugaAngajat() {
         System.out.println("Adauga angajat");
         Angajat angajat = citesteAngajat();
         try {
             serviciuAngajat.adaugaAngajat(angajat);
             System.out.println("Un nou angajat a fost inregistrat: " + angajat);
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private void afiseazaAngajatii(){
+    private void afiseazaAngajatii() {
         System.out.println("Afiseaza toti angajatii inregistrati: ");
         Set<Angajat> angajati = serviciuAngajat.getAngajati();
-        if(angajati.isEmpty())
+        if (angajati.isEmpty())
             System.out.println("Nu exista angajati inregistrati!");
         else
             angajati.forEach(System.out::println);
     }
 
-    private void cautaAngajatDupaId(){
+    private void cautaAngajatDupaId() {
         System.out.println("Cauti angajatul cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         try {
@@ -598,7 +622,7 @@ public class ClientApp {
         }
     }
 
-    private void actualizeazaAngajat(){
+    private void actualizeazaAngajat() {
         System.out.println("Actualizeaza angajatul cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Citeste noul angajat: ");
@@ -606,23 +630,23 @@ public class ClientApp {
         try {
             serviciuAngajat.updateAngajat(id, angajat);
             System.out.println("Angajatul a fost actualizat cu succes!");
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private void stergeAngajat(){
+    private void stergeAngajat() {
         System.out.println("Sterge angajatul cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         try {
             serviciuAngajat.stergeAngajat(id);
             System.out.println("Angajatul a fost sters cu succes");
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private Angajat citesteAngajat(){
+    private Angajat citesteAngajat() {
         System.out.println("Id: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Nume: ");
@@ -638,27 +662,27 @@ public class ClientApp {
         return new Angajat(id, nume, email, telefon, dataAngajarii, pozitie);
     }
 
-    private void afiseazaCititorii(){
+    private void afiseazaCititorii() {
         System.out.println("Afiseaza toti cititorii inregistrati: ");
         Set<Cititor> cititori = serviciuCititor.getCititori();
-        if(cititori.isEmpty())
+        if (cititori.isEmpty())
             System.out.println("Nu exista cititori inregistrati!");
         else
             cititori.forEach(System.out::println);
     }
 
-    private void adaugaCititor(){
+    private void adaugaCititor() {
         System.out.println("Adauga cititor");
         Cititor cititor = citesteCititor();
         try {
             serviciuCititor.adaugaCititor(cititor);
             System.out.println("Un nou cititor a fost inregistrat: " + cititor);
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
 
-    private Cititor citesteCititor(){
+    private Cititor citesteCititor() {
         System.out.println("Id: ");
         int id = readOption(Integer.MAX_VALUE);
         System.out.println("Nume: ");
@@ -691,16 +715,19 @@ public class ClientApp {
         switch (option) {
             case 1: {
                 afiseazaCartile();
+                audit.log("Afisare carti");
                 meniuCititor();
                 break;
             }
             case 2: {
                 adaugaImprumut();
+                audit.log("Imprumutare carte");
                 meniuCititor();
                 break;
             }
             case 3: {
                 stergeImprumut();
+                audit.log("Returnare carte");
                 meniuCititor();
                 break;
             }
@@ -711,25 +738,26 @@ public class ClientApp {
         }
     }
 
-    private void adaugaImprumut(){
+    private void adaugaImprumut() {
         System.out.println("Imprumuta o carte: ");
         try {
             Imprumut imprumut = citesteImprumut();
             serviciuImprumut.adaugaImprumut(imprumut);
             serviciuCarte.stergeCarte(imprumut.getCarte().getId());
             System.out.println("Cartea a fost imprumutata cu succes: " + imprumut);
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
-    private void stergeImprumut(){
+
+    private void stergeImprumut() {
         System.out.println("Returneaza imprumutul cu id-ul: ");
         int id = readOption(Integer.MAX_VALUE);
         try {
             serviciuCarte.adaugaCarte(serviciuImprumut.getImprumutById(id).getCarte());
             serviciuImprumut.stergeImprumut(id);
             System.out.println("Cartea a fost returnata cu succes");
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
     }
@@ -768,7 +796,7 @@ public class ClientApp {
         System.out.println("Alege cartea dorita: ");
 
         Carte carte = null;
-        while(true) {
+        while (true) {
             afiseazaCartile();
             System.out.println("Id-ul cartii dorite/ 0 pentru iesire: ");
             int idCarte = readOption(Integer.MAX_VALUE);
@@ -787,7 +815,7 @@ public class ClientApp {
         return new Imprumut(carte, cititor);
     }
 
-    private String readString(String s){
+    private String readString(String s) {
         while (s.trim().isEmpty()) {
             System.out.print("Incercati din nou! Input-ul nu poate fi gol: ");
             s = scanner.nextLine();

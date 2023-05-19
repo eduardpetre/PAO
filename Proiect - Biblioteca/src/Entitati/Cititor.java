@@ -1,4 +1,4 @@
-package Entitati;
+package entitati;
 
 public class Cititor extends Utilizator{
     private boolean elev;

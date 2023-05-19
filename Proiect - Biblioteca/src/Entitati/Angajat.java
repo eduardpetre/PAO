@@ -1,6 +1,6 @@
-package Entitati;
+package entitati;
 
-public class Angajat extends Utilizator{
+public class Angajat extends Utilizator {
     private String dataAngajarii;
     private String pozitie;
 
@@ -32,7 +32,7 @@ public class Angajat extends Utilizator{
     @Override
     public String toString() {
         return "Angajat{" +
-                "id='"+ getId() + '\'' +
+                "id='" + getId() + '\'' +
                 ", dataAngajarii='" + dataAngajarii + '\'' +
                 ", pozitie='" + pozitie + '\'' +
                 '}';

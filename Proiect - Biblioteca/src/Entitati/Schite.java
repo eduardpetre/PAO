@@ -1,4 +1,4 @@
-package Entitati;
+package entitati;
 
 public class Schite extends Carte{
     private int nrActe;

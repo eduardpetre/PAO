@@ -1,4 +1,4 @@
-package Entitati;
+package entitati;
 
 public class Poezie extends Carte{
     private int nrVolum;

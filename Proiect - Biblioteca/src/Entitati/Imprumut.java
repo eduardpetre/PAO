@@ -1,4 +1,4 @@
-package Entitati;
+package entitati;
 
 public class Imprumut {
     private static int cnt = 1;

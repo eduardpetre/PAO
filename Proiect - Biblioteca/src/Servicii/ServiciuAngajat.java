@@ -1,68 +1,43 @@
-package Servicii;
+package servicii;
 
-import Entitati.Angajat;
+import persistenta.AngajatRepo;
+import entitati.Angajat;
+
 import java.util.*;
 
-public class ServiciuAngajat implements InterfataAngajat{
-    private Set<Angajat> angajati = new HashSet<Angajat>();;
-    private static ServiciuAngajat init;
+public class ServiciuAngajat implements InterfataAngajat {
 
-    public ServiciuAngajat() {
-    }
-
-    public static ServiciuAngajat getInit(){
-        if(init == null)
-            init = new ServiciuAngajat();
-        return init;
-    }
+    private AngajatRepo angajatRepo = AngajatRepo.getInit();
 
     public Set<Angajat> getAngajati() {
-        Set<Angajat> angajati_aux = new HashSet<Angajat>();;
-        angajati_aux.addAll(this.angajati);
-        return angajati_aux;
+        return angajatRepo.findAllSet();
     }
 
     public Angajat getAngajatById(int idx) throws Exception {
-        for(Angajat a: angajati){
-            if(a.getId() == idx){
-                return a;
-            }
-        }
-        throw new Exception("Angajatul cu acest id nu exista!");
+        Optional<Angajat> angajat = angajatRepo.findById(idx);
+        return angajat.orElseThrow(() -> new Exception("Angajatul cu acest id nu exista!"));
     }
-    public void adaugaAngajat(Angajat angajat) throws Exception {
-        for(Angajat a: angajati){
-            if(a.getId() == angajat.getId()){
-                throw new Exception("Angajatul cu acest id exista deja!");
-            }
-        }
-        this.angajati.add(angajat);
+
+    public Angajat adaugaAngajat(Angajat angajat) throws Exception {
+        if (angajatRepo.findById(angajat.getId()).isPresent())
+            throw new Exception("Angajatul cu acest id exista deja!");
+        else
+            return angajatRepo.save(angajat);
     }
+
     public void updateAngajat(int idx, Angajat angajat) throws Exception {
-        boolean updated = false;
-        for(Angajat a: angajati){
-            if(a.getId() == idx){
-                this.angajati.remove(a);
-                this.angajati.add(angajat);
-                updated = true;
-            } else if (a.getId() == angajat.getId()) {
-                throw new Exception("Exista deja un angajat cu acest id!");
-            }
-        }
-        if (!updated)
-            throw new Exception("Angajatul cu acest id nu exista!");
+        angajatRepo.findById(idx).
+                orElseThrow(() -> new Exception("Angajatul cu acest id nu exista!"));
+        if (angajatRepo.findById(angajat.getId()).isPresent())
+            throw new Exception("Exista deja un angajat cu acest id!");
+
+        angajatRepo.update(idx, angajat);
     }
 
     public void stergeAngajat(int idx) throws Exception {
-        boolean deleted = false;
-        for(Angajat a: angajati){
-            if(a.getId() == idx){
-                this.angajati.remove(a);
-                deleted = true;
-                break;
-            }
-        }
-        if (!deleted)
-            throw new Exception("Angajatul cu acest id nu exista!");
+        angajatRepo.findById(idx).
+                orElseThrow(() -> new Exception("Angajatul cu acest id nu exista!"));
+
+        angajatRepo.delete(idx);
     }
 }

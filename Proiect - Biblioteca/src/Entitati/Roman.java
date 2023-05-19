@@ -1,4 +1,4 @@
-package Entitati;
+package entitati;
 
 public class Roman extends Carte{
     private int nrCapitole;
